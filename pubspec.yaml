@@ -6,3 +6,4 @@ dependencies:
     sdk: flutter
 environment:
   sdk: '>=1.19.0 <3.0.0'
+repository: https://github.com/itzMeerkat/flutter_image_map

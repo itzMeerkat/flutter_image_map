@@ -1,5 +1,5 @@
 name: flutter_image_map
-version: 0.1.1
+version: 0.2.0
 description: Image map, just like what we have in html
 dependencies:
   flutter:

@@ -5,6 +5,12 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_image_map:
+
+dependency_overrides:
+  flutter_image_map:
+    path: ../flutter_image_map
+
+
 environment:
   sdk: '>=2.2.0 <3.0.0'
 flutter:

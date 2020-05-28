@@ -1,0 +1,12 @@
+name: flutter_image_map
+version: 0.9.1
+description: Image map, create areas with customizable colors on an image and response to clicking/touching. Just like what we have in html.
+homepage: https://github.com/itzMeerkat/flutter_image_map
+
+dependencies:
+  flutter:
+    sdk: flutter
+environment:
+  sdk: '>=2.2.0 <3.0.0'
+repository: https://github.com/itzMeerkat/flutter_image_map
+

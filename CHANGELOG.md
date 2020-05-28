@@ -1,4 +1,6 @@
 # Change Log
+## 0.9.1
++ Changed the file structure.
 ## 0.9.0
 + Overhaul the entire class, easier to use.
 + Added example.

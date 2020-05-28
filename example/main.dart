@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_image_map/flutter_image_map.dart';
+import '../lib/flutter_image_map.dart';
 
 void main() => runApp(MyApp());
 class MyApp extends StatefulWidget {

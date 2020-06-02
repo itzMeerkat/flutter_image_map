@@ -11,6 +11,42 @@
 .buttons {
   flex: 20%;
 }
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
 </style>
 <script>
 
@@ -25,20 +61,19 @@ var startY;
 var imageObj = new Image;
 // an array of objects that define different shapes
 var vertices = [
-    [10, 10], [100, 20], [60, 80], [200, 160]
 ]
 
 var shapes = [
-    [vertices[0], vertices[1], vertices[2], vertices[3]]
+    []
 ];
-
+var currentShapeRef = shapes[0];
 var RADIUS = 10;
 var draggingIndex = null;
 
 // draw a single rect
 function circle(c) {
-    console.log(c)
-    ctx.fillStyle = "#444444";
+    //console.log(c)
+    ctx.fillStyle = "rgba(255,0,0,0.8)";
     ctx.beginPath();
     ctx.arc(c[0], c[1], RADIUS, 0, Math.PI * 2);
     ctx.closePath();
@@ -58,7 +93,7 @@ function draw() {
         circle(vertices[i]);
     }
     for(var i=0;i<shapes.length;i++) {
-        ctx.fillStyle = '#f00';
+        ctx.fillStyle = "rgba(255,165,0,0.6)";
         ctx.beginPath();
         ctx.moveTo(shapes[i][0][0], shapes[i][0][1]);
         for(var j=1;j<shapes[i].length;j++) {
@@ -124,6 +159,43 @@ function myMove(e) {
         startY = my;
     }
 }
+
+function myClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var mx = parseInt(e.clientX - offsetX);
+    var my = parseInt(e.clientY - offsetY);
+    for (var i = 0; i < vertices.length; i++) {
+        var s = vertices[i];
+
+        var dx = s[0] - mx;
+        var dy = s[1] - my;
+        if (dx * dx + dy * dy < RADIUS * RADIUS) {
+            return;
+        }
+    }
+    vertices.push([mx,my]);
+    currentShapeRef.push(vertices[vertices.length-1]);
+    draw();
+}
+
+function newShape(){
+    shapes.push([]);
+    currentShapeRef = shapes[shapes.length-1];
+}
+
+function getResult() {
+    var ctnt="[";
+    for(var i=0;i<shapes.length;i++) {
+        ctnt+="[";
+        for(var j=0;j<shapes[i].length;j++) {
+            ctnt+= shapes[i][0]+","+ shapes[i][1]+",";
+        }
+        ctnt += "],";
+    }
+    ctnt += "]";
+    document.getElementById("exportContent").innerHTML = ctnt;
+}
 window.onload = function () {
     var input = document.getElementById('bgImg');
     input.addEventListener('change', handleFiles);
@@ -136,8 +208,23 @@ window.onload = function () {
     canvas.onmousedown = myDown;
     canvas.onmouseup = myUp;
     canvas.onmousemove = myMove;
+    canvas.onclick = myClick;
 
-   // draw();
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("myBtn");
+    var span = document.getElementsByClassName("close")[0];
+    btn.onclick = function () {
+        getResult();
+        modal.style.display = "block";
+    }
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 }
 
 function handleFiles(e) {
@@ -157,11 +244,20 @@ function handleFiles(e) {
     <div class="row">
         <div class="buttons" style="background-color: lightgrey;">
             <input type="file" id="bgImg" name="bgImg">
-            <button>New polygon</button>
-            <button>Export</button>
+            <button onclick="newShape()">New polygon</button>
+            <button id="myBtn">Export</button>
         </div>
     <div class="column">
         <canvas id="canvas"></canvas>
     </div>
+    </div>
+    <div id="myModal" class="modal">
+    
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="exportContent">Some text in the Modal..</p>
+        </div>
+    
     </div>
 </body>

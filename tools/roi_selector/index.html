@@ -1,0 +1,167 @@
+
+<style>
+.row {
+  display: flex;
+  height: 100%;
+}
+
+.column {
+  flex: 80%;
+}
+.buttons {
+  flex: 20%;
+}
+</style>
+<script>
+
+var canvas;
+var ctx;
+var BB;
+var offsetX;
+var offsetY;
+var dragok = false;
+var startX;
+var startY;
+var imageObj = new Image;
+// an array of objects that define different shapes
+var vertices = [
+    [10, 10], [100, 20], [60, 80], [200, 160]
+]
+
+var shapes = [
+    [vertices[0], vertices[1], vertices[2], vertices[3]]
+];
+
+var RADIUS = 10;
+var draggingIndex = null;
+
+// draw a single rect
+function circle(c) {
+    console.log(c)
+    ctx.fillStyle = "#444444";
+    ctx.beginPath();
+    ctx.arc(c[0], c[1], RADIUS, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.fill();
+}
+
+// clear the canvas
+function clear() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// redraw the scene
+function draw() {
+    clear();
+    ctx.drawImage(imageObj, 0, 0, imageObj.naturalWidth, imageObj.naturalHeight, 0, 0, imageObj.naturalWidth, imageObj.naturalHeight);
+    for (var i = 0; i < vertices.length; i++) {
+        circle(vertices[i]);
+    }
+    for(var i=0;i<shapes.length;i++) {
+        ctx.fillStyle = '#f00';
+        ctx.beginPath();
+        ctx.moveTo(shapes[i][0][0], shapes[i][0][1]);
+        for(var j=1;j<shapes[i].length;j++) {
+            ctx.lineTo(shapes[i][j][0], shapes[i][j][1]);
+        }
+        ctx.closePath();
+        ctx.fill();
+    }
+}
+
+
+// handle mousedown events
+function myDown(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var mx = parseInt(e.clientX - offsetX);
+    var my = parseInt(e.clientY - offsetY);
+
+    dragok = false;
+    for (var i = 0; i < vertices.length; i++) {
+        var s = vertices[i];
+
+        var dx = s[0] - mx;
+        var dy = s[1] - my;
+        if (dx * dx + dy * dy < RADIUS * RADIUS) {
+            dragok = true;
+            draggingIndex = i;
+            break;
+        }
+    }
+    // save the current mouse position
+    startX = mx;
+    startY = my;
+}
+
+// handle mouseup events
+function myUp(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    dragok = false;
+    draggingIndex = null;
+}
+
+// handle mouse moves
+function myMove(e) {
+    if (dragok) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // get the current mouse position
+        var mx = parseInt(e.clientX - offsetX);
+        var my = parseInt(e.clientY - offsetY);
+
+        var dx = mx - startX;
+        var dy = my - startY;
+
+        vertices[draggingIndex][0] += dx;
+        vertices[draggingIndex][1] += dy;
+        draw();
+
+        startX = mx;
+        startY = my;
+    }
+}
+window.onload = function () {
+    var input = document.getElementById('bgImg');
+    input.addEventListener('change', handleFiles);
+
+    canvas = document.getElementById("canvas");
+    ctx = canvas.getContext("2d");
+    BB = canvas.getBoundingClientRect();
+    offsetX = BB.left;
+    offsetY = BB.top;
+    canvas.onmousedown = myDown;
+    canvas.onmouseup = myUp;
+    canvas.onmousemove = myMove;
+
+   // draw();
+}
+
+function handleFiles(e) {
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    
+    
+    imageObj.onload = function () {
+        canvas.height = imageObj.naturalHeight;
+        canvas.width = imageObj.naturalWidth;
+        draw();
+    }
+    imageObj.src = URL.createObjectURL(e.target.files[0]);
+}
+</script>
+<body>
+    <div class="row">
+        <div class="buttons" style="background-color: lightgrey;">
+            <input type="file" id="bgImg" name="bgImg">
+            <button>New polygon</button>
+            <button>Export</button>
+        </div>
+    <div class="column">
+        <canvas id="canvas"></canvas>
+    </div>
+    </div>
+</body>

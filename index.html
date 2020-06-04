@@ -52,9 +52,6 @@
 
 var canvas;
 var ctx;
-var BB;
-var offsetX;
-var offsetY;
 var dragok = false;
 var startX;
 var startY;
@@ -109,8 +106,8 @@ function draw() {
 function myDown(e) {
     e.preventDefault();
     e.stopPropagation();
-    var mx = parseInt(e.clientX - offsetX);
-    var my = parseInt(e.clientY - offsetY);
+    var mx = parseInt(e.clientX - canvas.getBoundingClientRect().left);
+    var my = parseInt(e.clientY - canvas.getBoundingClientRect().top);
 
     dragok = false;
     for (var i = 0; i < vertices.length; i++) {
@@ -145,8 +142,8 @@ function myMove(e) {
         e.stopPropagation();
 
         // get the current mouse position
-        var mx = parseInt(e.clientX - offsetX);
-        var my = parseInt(e.clientY - offsetY);
+        var mx = parseInt(e.clientX - canvas.getBoundingClientRect().left);
+        var my = parseInt(e.clientY - canvas.getBoundingClientRect().top);
 
         var dx = mx - startX;
         var dy = my - startY;
@@ -163,8 +160,10 @@ function myMove(e) {
 function myClick(e) {
     e.preventDefault();
     e.stopPropagation();
-    var mx = parseInt(e.clientX - offsetX);
-    var my = parseInt(e.clientY - offsetY);
+    var mx = parseInt(e.clientX - canvas.getBoundingClientRect().left);
+    var my = parseInt(e.clientY - canvas.getBoundingClientRect().top);
+    console.log(canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top)
+    console.log(e.clientX, e.clientY)
     for (var i = 0; i < vertices.length; i++) {
         var s = vertices[i];
 
@@ -189,7 +188,7 @@ function getResult() {
     for(var i=0;i<shapes.length;i++) {
         ctnt+="[";
         for(var j=0;j<shapes[i].length;j++) {
-            ctnt+= shapes[i][0]+","+ shapes[i][1]+",";
+            ctnt+= shapes[i][j][0]+","+ shapes[i][j][1]+",";
         }
         ctnt += "],";
     }
@@ -202,9 +201,6 @@ window.onload = function () {
 
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
-    BB = canvas.getBoundingClientRect();
-    offsetX = BB.left;
-    offsetY = BB.top;
     canvas.onmousedown = myDown;
     canvas.onmouseup = myUp;
     canvas.onmousemove = myMove;

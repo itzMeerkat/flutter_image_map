@@ -1,12 +1,15 @@
 name: flutter_image_map_example
-version: 0.9.0
+version: 0.9.1
 description: Little demo
+publish_to: none
 
 dependencies:
   flutter:
     sdk: flutter
+  flutter_image_map:
+    path: ../
 environment:
-  sdk: '>=2.2.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 flutter:
   uses-material-design: true
   assets:

@@ -10,12 +10,12 @@ class ImageMap extends StatefulWidget {
   final Size imageSize;
   final bool isDebug;
   ImageMap(
-      {Key key,
-      @required this.imagePath,
-      @required this.imageSize,
-      @required this.onTap,
-      @required this.regions,
-      @required this.regionColors,
+      {Key? key,
+      required this.imagePath,
+      required this.imageSize,
+      required this.onTap,
+      required this.regions,
+      required this.regionColors,
       this.isDebug = false})
       : super(key: key);
 
@@ -30,7 +30,7 @@ class ImageMapState extends State<ImageMap> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTapDown: (details) {
-          RenderBox b = context.findRenderObject();
+          RenderBox b = context.findRenderObject() as RenderBox;
           Offset locPos = details.localPosition;
           double widthMul = widget.imageSize.width / b.size.width;
           double heightMul = widget.imageSize.height / b.size.height;

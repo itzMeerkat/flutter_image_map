@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ImageMapPainter extends CustomPainter {
   final List<Path> shapes;
-  final List<Paint> _paint = List();
+  final List<Paint> _paint = [];
   final List<Color> colors;
   final Paint blackPaint = Paint()
     ..color = Color.fromRGBO(255, 0, 0, 1)
@@ -12,9 +12,9 @@ class ImageMapPainter extends CustomPainter {
   bool debug;
 
   ImageMapPainter(
-      {@required this.shapes,
-      @required this.colors,
-      @required this.rawSize,
+      {required this.shapes,
+      required this.colors,
+      required this.rawSize,
       this.debug = false}) {
     for (Color c in this.colors) {
       Paint p = Paint();

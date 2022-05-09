@@ -1,4 +1,6 @@
 # Change Log
+## 0.9.3
++ Adopt null safety, boost example to a web app.
 ## 0.9.2
 + Added a ROI selecting tool, and updated relative documents(In README.md).
 ## 0.9.1

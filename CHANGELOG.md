@@ -1,4 +1,6 @@
 # Change Log
+## 1.0.0
++ Added compatibility for https://www.image-map.net/ output
 ## 0.9.3
 + Adopt null safety, boost example to a web app.
 ## 0.9.2

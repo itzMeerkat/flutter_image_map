@@ -10,9 +10,9 @@ class ImageMap extends StatefulWidget {
     required this.image,
     required this.onTap,
     required this.regions,
-    super.key,
+    Key? key,
     this.isDebug = false,
-  });
+  }) : super(key: key);
   final Image image;
   final List<ImageMapRegion> regions;
   final void Function(ImageMapRegion) onTap;
@@ -37,7 +37,7 @@ class ImageMapState extends State<ImageMap> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<ImageInfo>(
       future: getImageInfo(widget.image),
       builder: (context, snapshot) {
         final info = snapshot.data;

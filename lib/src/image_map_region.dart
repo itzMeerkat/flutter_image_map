@@ -117,7 +117,7 @@ class ImageMapRegion {
       final linkMatch = linkRegex.firstMatch(areaValue);
       final link = linkMatch?.group(1);
 
-      final shape = ImageMapShape.fromString(shapeMatch.group(1)!);
+      final shape = getImageMapShapeFromString(shapeMatch.group(1)!);
       final coords = coordsMatch
           .group(1)!
           .split(',')

@@ -3,19 +3,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_image_map/src/image_map_painter.dart';
+import 'package:flutter_image_map/src/image_map_region.dart';
 
 class ImageMap extends StatefulWidget {
   const ImageMap({
     required this.image,
     required this.onTap,
     required this.regions,
-    required this.regionColors,
     super.key,
     this.isDebug = false,
   });
   final Image image;
-  final List<Path> regions;
-  final List<Color> regionColors;
+  final List<ImageMapRegion> regions;
   final void Function(int) onTap;
   final bool isDebug;
 
@@ -55,7 +54,7 @@ class ImageMapState extends State<ImageMap> {
             final heightMul = info.image.height / b.size.height;
             final rawPos = Offset(locPos.dx * widthMul, locPos.dy * heightMul);
             for (var i = 0; i < widget.regions.length; i++) {
-              if (widget.regions[i].contains(rawPos)) {
+              if (widget.regions[i].path.contains(rawPos)) {
                 widget.onTap(i);
                 return;
               }
@@ -63,8 +62,12 @@ class ImageMapState extends State<ImageMap> {
           },
           child: CustomPaint(
             foregroundPainter: ImageMapPainter(
-              shapes: widget.regions,
-              colors: widget.regionColors,
+              shapes: widget.regions.map((e) => e.path).toList(
+                    growable: false,
+                  ),
+              colors: widget.regions.map((e) => e.color).toList(
+                    growable: false,
+                  ),
               rawSize: Size(
                 info.image.width.toDouble(),
                 info.image.height.toDouble(),

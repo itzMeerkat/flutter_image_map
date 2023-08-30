@@ -49,6 +49,19 @@ class ImageMapExample extends State<MyApp> {
               _tapped
                   ? const Color.fromRGBO(50, 200, 50, 0.5)
                   : const Color.fromRGBO(50, 50, 200, 0.5),
+            ),
+            ImageMapRegion.fromRect(
+              const Rect.fromLTWH(230, 295, 50, 50),
+              _tapped
+                  ? const Color.fromRGBO(50, 200, 50, 0.5)
+                  : const Color.fromRGBO(50, 50, 200, 0.5),
+            ),
+            ImageMapRegion.fromCircle(
+              const Offset(460, 395),
+              20,
+              _tapped
+                  ? const Color.fromRGBO(50, 200, 50, 0.5)
+                  : const Color.fromRGBO(50, 50, 200, 0.5),
             )
           ],
         ),

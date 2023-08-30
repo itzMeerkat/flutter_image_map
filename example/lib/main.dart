@@ -38,6 +38,8 @@ class ImageMapExample extends State<MyApp> {
   final List<Color> colors = List.generate(
       points.length, (index) => const Color.fromRGBO(50, 50, 200, 0.5));
 
+  bool _tapped = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,14 +47,15 @@ class ImageMapExample extends State<MyApp> {
         appBar: AppBar(title: const Text("flutter_image_map Example")),
         body: ImageMap(
           image: Image.asset('assets/worldmap.png'),
-          imageSize: const Size(698, 566),
           onTap: (i) {
-            colors[i] = colors[i] == const Color.fromRGBO(50, 50, 200, 0.5)
+            colors[i] = _tapped
                 ? const Color.fromRGBO(50, 200, 50, 0.5)
                 : const Color.fromRGBO(50, 50, 200, 0.5);
             // ignore: avoid_print
             print(i);
-            setState(() {});
+            setState(() {
+              _tapped = !_tapped;
+            });
           },
           regions: polygonRegions,
           regionColors: colors,

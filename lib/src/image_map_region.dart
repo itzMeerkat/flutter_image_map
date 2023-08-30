@@ -5,7 +5,7 @@ class ImageMapRegion {
   const ImageMapRegion({
     required this.shape,
     required this.path,
-    required this.color,
+    this.color = Colors.transparent,
   });
 
   factory ImageMapRegion.fromRect(Rect rect, Color color) {

@@ -25,7 +25,7 @@ class ImageMapExample extends State<MyApp> {
 <map name="image-map">
     <area target="" alt="Google" title="Google" href="https://www.google.com" coords="156,217,181,245" shape="rect">
     <area target="" alt="Apple" title="Apple" href="https://www.apple.com" coords="238,282,263,268,288,283,292,315,273,332,240,328,228,307" shape="poly">
-    <area target="" alt="Facebook &amp;amp; Instagram" title="Facebook &amp;amp; Instagram" href="https://www.meta.com" coords="381,247,22" shape="circle">
+    <area target="" alt="Facebook &amp; Instagram" title="Facebook &amp; Instagram" href="https://www.meta.com" coords="381,247,22" shape="circle">
 </map>
 ''',
       Colors.red.withOpacity(0.5),
@@ -36,6 +36,7 @@ class ImageMapExample extends State<MyApp> {
         body: ImageMap(
           image: Image.asset('assets/worldmap.png'),
           onTap: (region) {
+            // ignore: avoid_print
             print('Pressed: ${region.title} / ${region.link}');
             setState(() {
               _tapped = !_tapped;

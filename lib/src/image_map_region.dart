@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_image_map/src/image_map_shape.dart';
+import 'package:html_unescape/html_unescape.dart';
 
 class ImageMapRegion {
   const ImageMapRegion({
@@ -96,6 +97,8 @@ class ImageMapRegion {
       caseSensitive: false,
     );
 
+    final unescape = HtmlUnescape();
+
     for (final areaMatch in areaMatches) {
       final areaValue = areaMatch.group(0);
       if (areaValue == null) {
@@ -108,7 +111,11 @@ class ImageMapRegion {
       }
 
       final titleMatch = titleRegex.firstMatch(areaValue);
+      final titleText = titleMatch?.group(1);
+      final title = titleText != null ? unescape.convert(titleText) : null;
+
       final linkMatch = linkRegex.firstMatch(areaValue);
+      final link = linkMatch?.group(1);
 
       final shape = ImageMapShape.fromString(shapeMatch.group(1)!);
       final coords = coordsMatch
@@ -128,8 +135,8 @@ class ImageMapRegion {
                 coords[3],
               ),
               color: color,
-              title: titleMatch?.group(1),
-              link: linkMatch?.group(1),
+              title: title,
+              link: link,
             ),
           );
           break;
@@ -144,8 +151,8 @@ class ImageMapRegion {
             ImageMapRegion.fromPoly(
               points: offsets,
               color: color,
-              title: titleMatch?.group(1),
-              link: linkMatch?.group(1),
+              title: title,
+              link: link,
             ),
           );
           break;
@@ -158,8 +165,8 @@ class ImageMapRegion {
               ),
               radius: coords[2],
               color: color,
-              title: titleMatch?.group(1),
-              link: linkMatch?.group(1),
+              title: title,
+              link: link,
             ),
           );
           break;

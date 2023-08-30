@@ -15,7 +15,7 @@ class ImageMap extends StatefulWidget {
   });
   final Image image;
   final List<ImageMapRegion> regions;
-  final void Function(int) onTap;
+  final void Function(ImageMapRegion) onTap;
   final bool isDebug;
 
   @override
@@ -54,8 +54,9 @@ class ImageMapState extends State<ImageMap> {
             final heightMul = info.image.height / b.size.height;
             final rawPos = Offset(locPos.dx * widthMul, locPos.dy * heightMul);
             for (var i = 0; i < widget.regions.length; i++) {
-              if (widget.regions[i].path.contains(rawPos)) {
-                widget.onTap(i);
+              final obj = widget.regions[i];
+              if (obj.path.contains(rawPos)) {
+                widget.onTap(obj);
                 return;
               }
             }

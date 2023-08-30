@@ -6,6 +6,8 @@ class ImageMapRegion {
     required this.shape,
     required this.path,
     this.color = Colors.transparent,
+    this.title,
+    this.link,
   });
 
   factory ImageMapRegion.fromRect(Rect rect, Color color) {
@@ -35,4 +37,6 @@ class ImageMapRegion {
   final ImageMapShape shape;
   final Path path;
   final Color color;
+  final String? title;
+  final String? link;
 }

@@ -22,9 +22,7 @@ class ImageMapExample extends State<MyApp> {
         appBar: AppBar(title: const Text("flutter_image_map Example")),
         body: ImageMap(
           image: Image.asset('assets/worldmap.png'),
-          onTap: (i) {
-            // ignore: avoid_print
-            print(i);
+          onTap: (region) {
             setState(() {
               _tapped = !_tapped;
             });

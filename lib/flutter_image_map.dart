@@ -1,1 +1,1 @@
-export './src/ImageMap.dart';
+export 'src/image_map.dart';

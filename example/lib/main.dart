@@ -44,7 +44,7 @@ class ImageMapExample extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(title: const Text("flutter_image_map Example")),
         body: ImageMap(
-          imagePath: 'assets/worldmap.png',
+          image: Image.asset('assets/worldmap.png'),
           imageSize: const Size(698, 566),
           onTap: (i) {
             colors[i] = colors[i] == const Color.fromRGBO(50, 50, 200, 0.5)

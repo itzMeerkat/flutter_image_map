@@ -4,7 +4,7 @@ import 'package:flutter_image_map/src/image_map_painter.dart';
 
 class ImageMap extends StatefulWidget {
   const ImageMap({
-    required this.imagePath,
+    required this.image,
     required this.imageSize,
     required this.onTap,
     required this.regions,
@@ -12,7 +12,7 @@ class ImageMap extends StatefulWidget {
     super.key,
     this.isDebug = false,
   });
-  final String imagePath;
+  final Image image;
   final List<Path> regions;
   final List<Color> regionColors;
   final void Function(int) onTap;
@@ -49,7 +49,7 @@ class ImageMapState extends State<ImageMap> {
           rawSize: widget.imageSize,
           debug: widget.isDebug,
         ),
-        child: Image.asset(widget.imagePath),
+        child: widget.image,
       ),
     );
   }

@@ -25,22 +25,65 @@ class ImageMap extends StatefulWidget {
 }
 
 class ImageMapState extends State<ImageMap> {
+  late Future<ImageInfo> imageFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    imageFuture = getImageInfo(widget.image);
+  }
+
   Future<ImageInfo> getImageInfo(Image img) async {
     final c = Completer<ImageInfo>();
+
     img.image.resolve(ImageConfiguration.empty).addListener(
-      ImageStreamListener((ImageInfo i, bool _) {
-        c.complete(i);
-      }),
-    );
+          ImageStreamListener(
+            (ImageInfo i, bool _) {
+              c.complete(i);
+            },
+            onError: (exception, stackTrace) => c.completeError(exception),
+          ),
+        );
+
     return c.future;
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<ImageInfo>(
-      future: getImageInfo(widget.image),
+      future: imageFuture,
       builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  imageFuture = getImageInfo(widget.image);
+                });
+              },
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  Icon(
+                    Icons.cloud_download,
+                    size: 64,
+                    color: Colors.grey.shade800,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 48, bottom: 48),
+                    child: Icon(
+                      Icons.error,
+                      size: 20,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
         final info = snapshot.data;
+
         if (info == null) {
           return const Center(
             child: CircularProgressIndicator(),

@@ -1,4 +1,6 @@
 # Change Log
+## 1.0.1
++ When error occurs on image download show error with retry button
 ## 1.0.0
 + Added compatibility for https://www.image-map.net/ output
 ## 0.9.3

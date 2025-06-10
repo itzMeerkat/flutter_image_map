@@ -10,6 +10,7 @@ class ImageMap extends StatefulWidget {
     required this.image,
     required this.onTap,
     required this.regions,
+    this.mouseCursor = SystemMouseCursors.basic,
     Key? key,
     this.isDebug = false,
   }) : super(key: key);
@@ -17,6 +18,7 @@ class ImageMap extends StatefulWidget {
   final List<ImageMapRegion> regions;
   final void Function(ImageMapRegion) onTap;
   final bool isDebug;
+  final MouseCursor mouseCursor;
 
   @override
   State<StatefulWidget> createState() {
@@ -26,6 +28,7 @@ class ImageMap extends StatefulWidget {
 
 class ImageMapState extends State<ImageMap> {
   late Future<ImageInfo> imageFuture;
+  bool _isHoveringOverRegion = false;
 
   @override
   void initState() {
@@ -89,36 +92,75 @@ class ImageMapState extends State<ImageMap> {
             child: CircularProgressIndicator(),
           );
         }
-        return GestureDetector(
-          onTapDown: (details) {
+        return MouseRegion(
+          cursor:
+              _isHoveringOverRegion ? widget.mouseCursor : MouseCursor.defer,
+          onHover: (event) {
             final b = context.findRenderObject()! as RenderBox;
-            final locPos = details.localPosition;
+            final locPos = event.localPosition;
             final widthMul = info.image.width / b.size.width;
             final heightMul = info.image.height / b.size.height;
             final rawPos = Offset(locPos.dx * widthMul, locPos.dy * heightMul);
+
+            bool isOverRegion = false;
             for (var i = 0; i < widget.regions.length; i++) {
               final obj = widget.regions[i];
               if (obj.path.contains(rawPos)) {
-                widget.onTap(obj);
-                return;
+                isOverRegion = true;
+                break;
+              }
+            }
+
+            // Update cursor state if it changed
+            if (isOverRegion != _isHoveringOverRegion) {
+              if (mounted) {
+                setState(() {
+                  _isHoveringOverRegion = isOverRegion;
+                });
               }
             }
           },
-          child: CustomPaint(
-            foregroundPainter: ImageMapPainter(
-              shapes: widget.regions.map((e) => e.path).toList(
-                    growable: false,
-                  ),
-              colors: widget.regions.map((e) => e.color).toList(
-                    growable: false,
-                  ),
-              rawSize: Size(
-                info.image.width.toDouble(),
-                info.image.height.toDouble(),
+          onExit: (event) {
+            if (_isHoveringOverRegion) {
+              if (mounted) {
+                setState(() {
+                  _isHoveringOverRegion = false;
+                });
+              }
+            }
+          },
+          child: GestureDetector(
+            onTapDown: (details) {
+              final b = context.findRenderObject()! as RenderBox;
+              final locPos = details.localPosition;
+              final widthMul = info.image.width / b.size.width;
+              final heightMul = info.image.height / b.size.height;
+              final rawPos =
+                  Offset(locPos.dx * widthMul, locPos.dy * heightMul);
+              for (var i = 0; i < widget.regions.length; i++) {
+                final obj = widget.regions[i];
+                if (obj.path.contains(rawPos)) {
+                  widget.onTap(obj);
+                  return;
+                }
+              }
+            },
+            child: CustomPaint(
+              foregroundPainter: ImageMapPainter(
+                shapes: widget.regions.map((e) => e.path).toList(
+                      growable: false,
+                    ),
+                colors: widget.regions.map((e) => e.color).toList(
+                      growable: false,
+                    ),
+                rawSize: Size(
+                  info.image.width.toDouble(),
+                  info.image.height.toDouble(),
+                ),
+                debug: widget.isDebug,
               ),
-              debug: widget.isDebug,
+              child: widget.image,
             ),
-            child: widget.image,
           ),
         );
       },

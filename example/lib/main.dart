@@ -34,6 +34,7 @@ class ImageMapExample extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(title: const Text("flutter_image_map Example")),
         body: ImageMap(
+          mouseCursor: SystemMouseCursors.click,
           image: Image.asset('assets/worldmap.png'),
           onTap: (region) {
             // ignore: avoid_print
